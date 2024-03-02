@@ -257,6 +257,299 @@ void Graphics::DrawImage(int a)
   //al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
 }
 
+void Graphics::DrawPeach(Entity* Peach)
+{
+  //al_set_target_bitmap(buffer);
+  /*al_draw_bitmap(staticBitmaps[4], Peach->getY(), Peach->getX(), 0);
+  al_set_target_backbuffer(display);
+  al_clear_to_color(al_map_rgb(0, 0, 0));
+  al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
+
+
+  {
+    sf::Sprite sprite(*staticBitmaps[4]);
+    sprite.setPosition(Peach->getY(), Peach->getX()); 
+    buffer->draw(sprite);
+  }
+}
+
+void Graphics::DrawStaticBarrels()
+{
+  //al_set_target_bitmap(buffer);
+  //al_draw_bitmap(staticBitmaps[3], 33, 99, 0);
+  //al_draw_bitmap(staticBitmaps[3], 33, 120, 0);
+  //al_draw_bitmap(staticBitmaps[3], 10, 99, 0);
+  //al_draw_bitmap(staticBitmaps[3], 10, 120, 0);
+  //al_set_target_backbuffer(display);
+  //al_clear_to_color(al_map_rgb(0, 0, 0));
+  //al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+
+
+  {
+    sf::Sprite sprite(*staticBitmaps[3]);
+    //sprite.setScale(scaleX, scaleY);
+    sprite.setPosition(33, 99);
+    buffer->draw(sprite);
+
+    sprite.setPosition(33, 120);
+    buffer->draw(sprite);
+
+    sprite.setPosition(10, 99);
+    buffer->draw(sprite);
+
+    sprite.setPosition(10, 120);
+    buffer->draw(sprite);
+  }
+}
+
+void Graphics::DrawKong(Kong* Wukong)
+{
+  //al_set_target_bitmap(buffer);
+  // TODO: use sprite animation class
+  if (Wukong->getFrame() > 0 and Wukong->getFrame() <= Wukong->getDifficolta() * 20)
+    bitmap.loadFromFile("assets/img/kong/kong1.png");
+  else if (Wukong->getFrame() > Wukong->getDifficolta() * 20 and Wukong->getFrame() <= Wukong->getDifficolta() * 40)
+    bitmap.loadFromFile("assets/img/kong/kong2.png");
+  else if (Wukong->getFrame() > Wukong->getDifficolta() * 40 and Wukong->getFrame() <= Wukong->getDifficolta() * 60)
+    bitmap.loadFromFile("assets/img/kong/kong3.png");
+  else if (Wukong->getFrame() > Wukong->getDifficolta() * 60 and Wukong->getFrame() <= Wukong->getDifficolta() * 80)
+    bitmap.loadFromFile("assets/img/kong/kong4.png");
+  else
+    bitmap.loadFromFile("assets/img/kong/kong5.png");
+
+  /*al_draw_bitmap(bitmap, Wukong->getY(), Wukong->getX(), 0);
+  al_destroy_bitmap(bitmap);
+
+  al_set_target_backbuffer(display);
+  al_clear_to_color(al_map_rgb(0, 0, 0));
+  al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
+  
+  sf::Sprite sprite(bitmap);
+  //sprite.setScale(scaleX, scaleY);
+  sprite.setPosition(Wukong->getY(), Wukong->getX());
+  buffer->draw(sprite);
+
+  Wukong->nextFrame();
+}
+
+void Graphics::DrawExplosive(int& frame)
+{
+  // TODO: use sprite animation class
+  //al_set_target_bitmap(buffer);
+  if (frame >= 0 and frame < 4)
+    bitmap.loadFromFile("assets/img/enemy/fire0.png");
+  else if (frame >= 4 and frame < 8)
+    bitmap.loadFromFile("assets/img/enemy/fire1.png");
+  else if (frame >= 8 and frame < 12)
+    bitmap.loadFromFile("assets/img/enemy/fire2.png");
+  else if (frame >= 12 and frame < 16)
+    bitmap.loadFromFile("assets/img/enemy/fire3.png");
+
+  if (frame >= 15)
+    frame = 0;
+  else
+    frame++;
+
+  //al_draw_bitmap(bitmap, 40, 500, 0);
+  //al_destroy_bitmap(bitmap);
+  //al_set_target_backbuffer(display);
+  //al_clear_to_color(al_map_rgb(0, 0, 0));
+  //al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+
+  sf::Sprite sprite(bitmap);
+  sprite.setPosition(40, 500);
+  buffer->draw(sprite);
+}
+
+
+void Graphics::DrawCut(int frame)
+{
+  DrawMap(true);
+  //al_set_target_bitmap(buffer);
+
+  auto drawBitmap = [this](const std::string& path, int x, int y) {
+    sf::Texture texture;
+    texture.loadFromFile(path);
+    sf::Sprite sprite(texture);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+  };
+
+  auto drawStaticBitmap = [this](int index, int x, int y) {
+    sf::Sprite sprite(*staticBitmaps[index]);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+  };
+
+  switch (frame)
+  {
+  case 0:
+    //bitmap = al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_standing.png");
+    //al_draw_bitmap(bitmap, 60, 80, 0);
+    //al_draw_bitmap(staticBitmaps[4], 280, 60, 0);
+
+    drawBitmap("assets/img/cutscene/kong_standing.png", 60, 80);   
+    drawStaticBitmap(4, 280, 60);
+
+    break;
+  case 1:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_standing.png");
+    //al_draw_bitmap(bitmap, 200, 20, 0);
+    //al_draw_bitmap(staticBitmaps[4], 280, 60, 0);
+
+    drawBitmap("assets/img/cutscene/kong_standing.png", 200, 20); 
+    drawStaticBitmap(4, 280, 60); 
+
+    break;
+  case 2:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_standing.png");
+    //al_draw_bitmap(bitmap, 220, 20, 0);
+    //al_draw_bitmap(staticBitmaps[4], 280, 60, 0);
+
+    drawBitmap("assets/img/cutscene/kong_standing.png", 220, 20); 
+    drawStaticBitmap(4, 280, 60);
+    break;
+  case 3:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_left0.png");
+    //al_draw_bitmap(bitmap, 140, 60, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_left0.png", 140, 60); 
+    break;
+  case 4:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_right0.png");
+    //al_draw_bitmap(bitmap, 140, 55, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_right0.png", 140, 55);
+    break;
+  case 5:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_left0.png");
+    //al_draw_bitmap(bitmap, 140, 50, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_left0.png", 140, 50); 
+    break;
+  case 6:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_right0.png");
+    //al_draw_bitmap(bitmap, 140, 45, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_right0.png", 140, 45);  
+    break;
+  case 7:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_left0.png");
+    //al_draw_bitmap(bitmap, 140, 40, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_left0.png", 140, 40);
+    break;
+  case 8:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_right0.png");
+    //al_draw_bitmap(bitmap, 140, 35, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_right0.png", 140, 35);  
+    break;
+  case 9:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_left0.png");
+    //al_draw_bitmap(bitmap, 140, 25, 0);
+    
+    drawBitmap("assets/img/cutscene/kong_climbing_left0.png", 140, 25); 
+    break;
+  case 10:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_right0.png");
+    //al_draw_bitmap(bitmap, 140, 20, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_right0.png", 140, 20);  
+    break;
+  case 11:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_left0.png");
+    //al_draw_bitmap(bitmap, 140, 15, 0);
+
+    drawBitmap  ("assets/img/cutscene/kong_climbing_left0.png", 140, 15);   
+    break;
+  case 12:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_right0.png");
+    //al_draw_bitmap(bitmap, 140, 10, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_right0.png", 140, 10);  
+    break;
+  case 13:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_climbing_left0.png");
+    //al_draw_bitmap(bitmap, 140, 5, 0);
+
+    drawBitmap("assets/img/cutscene/kong_climbing_left0.png", 140, 5);  
+    break;
+  case 14:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_standing.png");
+    //al_draw_bitmap(bitmap, 60, 80, 0);
+    //al_destroy_bitmap(bitmap);
+
+    drawBitmap("assets/img/cutscene/kong_standing.png", 60, 80);  
+
+    //bitmap = al_load_bitmap("assets/img/Player/right1.png");
+    //al_draw_bitmap(bitmap, 20, 120, 0);
+    drawBitmap("assets/img/player/right1.png", 20, 120);  
+
+    //al_draw_bitmap(staticBitmaps[4], 280, 60, 0);
+    drawStaticBitmap(4, 280, 60); 
+    break;
+  case 15:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_onhead.png");
+    //al_draw_bitmap(bitmap, 60, 80, 0);
+    //al_destroy_bitmap(bitmap);
+
+    drawBitmap("assets/img/cutscene/kong_onhead.png", 60, 80);  
+
+    //bitmap = al_load_bitmap("assets/img/Player/Hammer4R.png");
+    //al_draw_bitmap(bitmap, 37, 120, 0);
+    drawBitmap("assets/img/player/hammer4r.png", 37, 120);    
+
+    //al_draw_bitmap(staticBitmaps[4], 280, 60, 0);
+    drawStaticBitmap(4, 280, 60); 
+    break;
+  case 16:
+    //bitmap = al_load_bitmap("assets/img/Cutscene/kong_knockedout.png");
+    //al_draw_bitmap(bitmap, 60, 80, 0);
+    //al_destroy_bitmap(bitmap);
+    drawBitmap("assets/img/cutscene/kong_knockedout.png", 60, 80);  
+    
+    //bitmap = al_load_bitmap("assets/img/Player/Hammer4R.png");
+    //al_draw_bitmap(bitmap, 37, 120, 0);
+    drawBitmap("assets/img/player/hammer4r.png", 37, 120);  
+
+    //al_draw_bitmap(staticBitmaps[4], 280, 60, 0);
+    drawStaticBitmap(4, 280, 60);
+    break;
+  case 17:
+    //al_draw_bitmap(staticBitmaps[4], 280, 60, 0);
+    drawStaticBitmap(4, 280, 60); 
+
+    //bitmap = al_load_bitmap("assets/img/Player/right1.png");
+    //al_draw_bitmap(bitmap, 245, 60, 0);
+    drawBitmap("assets/img/player/right1.png", 245, 60);  
+    break;
+  case 18:
+    //al_draw_bitmap(staticBitmaps[4], 280, 60, 1);
+    drawStaticBitmap(4, 280, 60);
+
+    //bitmap = al_load_bitmap("assets/img/Player/right1.png");
+    //al_draw_bitmap(bitmap, 260, 60, 0);
+    //al_destroy_bitmap(bitmap);
+
+    drawBitmap("assets/img/player/right1.png", 260, 60);  
+
+    //bitmap = al_load_bitmap("assets/img/Cutscene/heart.png");
+    //al_draw_bitmap(bitmap, 270, 47, 0);
+    drawBitmap("assets/img/cutscene/heart.png", 270, 47); 
+    break;
+  }
+
+ /* al_destroy_bitmap(bitmap);
+  al_set_target_backbuffer(display);
+  al_clear_to_color(al_map_rgb(0, 0, 0));
+  al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
+
+  
+}
+
+
+
 #if 0
 Graphics(sf::RenderWindow* display,
   sf::RenderTexture* buffer,
@@ -455,6 +748,7 @@ void Graphics::DrawStaticBarrels()
   al_clear_to_color(al_map_rgb(0, 0, 0));
   al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
 }
+
 void Graphics::DrawExplosive(int& frame)
 {
   al_set_target_bitmap(buffer);

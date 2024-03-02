@@ -44,6 +44,7 @@ public:
     void DrawImage(int a);
     void DrawCut(int frame);
     
+    // TODO: remove me
     bool getEvent(sf::Event& event) {
       return window->pollEvent(event);
     }
@@ -65,16 +66,20 @@ private:
   int scaleX;
   int scaleY;
 
-  sf::RenderWindow* window;
-  sf::RenderTexture* buffer;
-  sf::Texture* bitmap;
+  sf::RenderWindow* window = nullptr;
+  sf::RenderTexture* buffer = nullptr;
+
+  sf::Texture bitmap; // this is used by kong render
+
+  // AnimatitedSprite enemyFire;
+  sf::Texture fireTexture;
 
   sf::Font* font;
   sf::Font* fontScore;
 
   std::vector <sf::Texture*> staticBitmaps;
-  int x;
-  int y;
+  int x = 0;
+  int y = 0;
   bool grid_allocated = false;
-  int l;
+  int l = 0;
 };
