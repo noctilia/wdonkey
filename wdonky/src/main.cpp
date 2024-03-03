@@ -26,7 +26,8 @@ int main(int argv, char** argc)
 
 
   sf::RenderWindow window(sf::VideoMode(l, h), "Donkey Kong");
-  window.setFramerateLimit(60);
+  // todo: use timed logic loop
+  window.setFramerateLimit(30);
 
   sf::RenderTexture buffer;
   buffer.create(window.getSize().x, window.getSize().y);

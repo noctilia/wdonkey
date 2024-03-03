@@ -693,8 +693,8 @@ void Graphics::DrawBarrel(Barrel& Bar)
     buffer->draw(sprite);
     };
 
-  auto x = Bar.getX();
-  auto y = Bar.getY();
+  auto y = Bar.getX();
+  auto x = Bar.getY();
   bool flippedX = (Bar.getDirection() == RIGHT) ? false : true; 
 
   //al_set_target_bitmap(buffer);

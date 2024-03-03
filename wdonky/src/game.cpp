@@ -203,8 +203,10 @@ bool Game::runGame(int& lifes, int& level, int& score)
             lifes = 1;
           }
 
-          if (sf::Event::Closed == event.type)
+          if (sf::Event::Closed == event.type) {
             done = true;
+            lifes = 1;
+          }
 
           if (event.key.code == sf::Keyboard::Tab)
           {
@@ -219,7 +221,13 @@ bool Game::runGame(int& lifes, int& level, int& score)
             if (!muted)
               SoundManager->playHammer();
           }
-          //for (int i = 0;
+
+
+          //for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
+          //  key[i] &= KEY_SEEN;
+
+
+
         }
       }
 #if 0
@@ -363,11 +371,97 @@ bool Game::runGame(int& lifes, int& level, int& score)
         lifes = 1;
         break;
 
-          }
+        }
 #endif
       if (done)
         break;
 
+      /**************************************************************************************/
+      /* logic loop */
+      /**************************************************************************************/
+
+      // this needs timer events... oder move to logic loop
+      Play->HandleGravity();
+      Play->HandleGravity();
+      if (Play->getX() / 20 == 21 and Play->getY() / 20 == 17 and Play->getMartello() == false and hammerTime == 0)//prende il martello.
+        Play->setMartello(true);
+      if (hTime < 30)
+        hTime++;
+      else
+      {
+        hTime = 0;
+        Play->setHammered(false);
+      }
+
+      if (Play->getMartello())
+        hammerTime++;
+
+      if (hammerTime > 325 and Play->getMartello())
+        Play->setMartello(false);
+
+      if (Wukong->getLancia() == Wukong->getFrame())
+      {
+        Barili.push_back(Bar);
+        Wukong->nextFrame();
+      }
+
+      for (auto i = Barili.begin(); i != Barili.end(); i++)
+      {
+
+        i->roll();
+        i->HandleGravity();
+        if (Play->getX() / 20 == i->getX() / 20 and Play->getY() / 20 == i->getY() / 20)
+        {
+          SoundManager->stopSamples();
+          if (!muted)
+            SoundManager->playDeath();
+          Play->setMorto(true);
+          
+          //al_rest(4);
+          done = true;
+        }
+
+        if ((Play->getX() / 20 == (i->getX() / 20) - 1 or Play->getX() / 20 == (i->getX() / 20) - 2) and Play->getY() / 20 == i->getY() / 20
+          and i->getJumped() == false and Play->getLadderstate() == false and (Play->getJump() or Play->isFalling()))
+        {
+          score += 100;
+          addpunteggiobarile += 4;
+          i->setJumped(true);
+        }
+
+        if (i->getStop())
+        {
+          temp = i;
+          i++;
+          Barili.erase(temp);
+
+        }
+        if (
+          Play->getHammered() and Play->getDirection() == LEFT and (Play->getY() / 20) - 1 == i->getY() / 20 and Play->getX() / 20 == i->getX() / 20
+          or
+          Play->getHammered() and Play->getDirection() == RIGHT and (Play->getY() / 20) + 1 == i->getY() / 20 and Play->getX() / 20 == i->getX() / 20)
+        {
+          temp = i;
+          segnaCancellazione.first = i->getX();
+          segnaCancellazione.second = i->getY();
+          i++;
+          Barili.erase(temp);
+          score += 300;
+          addpunteggiomartello += 5;
+        }
+
+      }
+      if (Play->getX() / 20 == Peach->getX() / 20 and Play->getY() / 20 == Peach->getY() / 20 and level != 4)  //completa il level
+      {
+        complete = true;
+        done = true;
+      }
+      if (Play->getX() / 20 == 6 and Play->getY() / 20 == 1 and level == 4)  //completa il gioco
+      {
+        complete = true;
+        done = true;
+      }
+      /************************************************************************************************************/
       //if (redraw and al_is_event_queue_empty(queue))
       {
         GraphicManager->DrawMap(false);
@@ -411,7 +505,7 @@ bool Game::runGame(int& lifes, int& level, int& score)
         GraphicManager->flipDisplay();
         redraw = false;
       }
-    }
+      }
     delete Play;
     delete Wukong;
     delete Peach;
@@ -419,12 +513,12 @@ bool Game::runGame(int& lifes, int& level, int& score)
     if (complete)
       break;
     lifes--;
-  }
+    }
   if (level == 3)                 //difficoltà torna normale
     difficulty += 0.3;
   SoundManager->stopSamples();
   return complete;
-}
+  }
 
 void Game::runOptions()
 {
@@ -921,7 +1015,7 @@ void Game::runOptions(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
         if (!muted)
           SoundManager->playBack();
         al_rest(0.3);
-      }
+        }
       if (event.keyboard.keycode == ALLEGRO_KEY_M)
       {
         SoundManager->playPress();
@@ -940,7 +1034,7 @@ void Game::runOptions(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
     case ALLEGRO_EVENT_DISPLAY_CLOSE:
       done = true;
       break;
-          }
+      }
 
     if (done)
       break;
@@ -951,8 +1045,8 @@ void Game::runOptions(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
       al_flip_display();
       redraw = false;
     }
-        }
-      }
+    }
+  }
 void Game::runStatic(ALLEGRO_EVENT_QUEUE* queue, int a)
 {
   al_flush_event_queue(queue);
