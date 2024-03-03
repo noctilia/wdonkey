@@ -749,8 +749,105 @@ void Graphics::DrawBarrel(Barrel& Bar)
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
   }
-
 }
+
+void Graphics::DrawScore(int score)
+{
+  sf::Text text;
+  text.setFont(*fontScore);
+  text.setString("SCORE");
+  text.setCharacterSize(24);
+  text.setFillColor(sf::Color::White);
+  text.setPosition(315, 50);
+  buffer->draw(text);
+
+  text.setString(std::to_string(score));
+  text.setCharacterSize(24);
+  text.setFillColor(sf::Color::Red);
+  text.setPosition(329, 75);
+  buffer->draw(text);
+
+  //al_set_target_bitmap(buffer);
+  //al_draw_textf(fontScore, al_map_rgb(255, 255, 255), 315, 50, 0, " SCORE");
+  //al_draw_textf(fontScore, al_map_rgb(255, 0, 0), 329, 75, 0, "%d", score);
+  //al_set_target_backbuffer(display);
+  //al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+}
+
+void Graphics::DrawInstantScore(int opt, int x, int y)
+{
+  sf::Text text;
+  text.setFont(*fontScore); 
+  text.setCharacterSize(24);  
+  text.setFillColor(sf::Color::White);  
+  text.setPosition(y, x);
+
+  //al_set_target_bitmap(buffer);
+  if (opt == 1)
+  {
+    text.setString("100");
+    //al_draw_text(font, al_map_rgb(255, 255, 255), y, x, 0, "300");
+  }
+  else
+  {
+    text.setString("300");  
+    //al_draw_text(font, al_map_rgb(255, 255, 255), y, x, 0, "100");
+  }
+  buffer->draw(text);
+  //al_set_target_backbuffer(display);
+  //al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+}
+
+void Graphics::DrawDelete(int& x, int& y)
+{
+  auto drawBitmap = [this](const std::string& path, int x, int y) {
+    sf::Texture texture;
+    texture.loadFromFile(path);
+    sf::Sprite sprite(texture);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+    };
+
+  if (x == 0 and y == 0)
+    return;
+
+  //al_set_target_bitmap(buffer);
+  drawBitmap("assets/img/barrel/deletebarrel.png", y, x); 
+
+  /*bitmap = al_load_bitmap("../Assets/Bitmaps/Barrel/deletebarrel.png");
+  al_draw_bitmap(bitmap, y, x, 0);
+  al_destroy_bitmap(bitmap);
+  al_set_target_backbuffer(display);
+  al_clear_to_color(al_map_rgb(0, 0, 0));
+  al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
+  x = 0;
+  y = 0;
+}
+
+void Graphics::DrawLives(int lifes)
+{
+  auto drawBitmap = [this](const std::string& path, int x, int y) {
+    sf::Texture texture;
+    texture.loadFromFile(path);
+    sf::Sprite sprite(texture);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+    };
+
+  
+  //al_set_target_bitmap(buffer);
+  //bitmap = al_load_bitmap("../Assets/Bitmaps/life.png");
+  for (int c = 0; c < lifes; c++)
+  {
+    // TODO: fix loading bitmap
+    drawBitmap("assets/img/life.png", 335 + (c * 22), 32);
+//    al_draw_bitmap(bitmap, 335 + (c * 22), 32, 0);
+  }
+  /*al_destroy_bitmap(bitmap);
+  al_set_target_backbuffer(display);
+  al_clear_to_color(al_map_rgb(0, 0, 0));
+  al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
+    }
 
 #if 0
 Graphics(sf::RenderWindow* display,

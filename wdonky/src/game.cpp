@@ -390,8 +390,8 @@ bool Game::runGame(int& lifes, int& level, int& score)
         if (Play->getMartello() == false and hammerTime < 200)
           GraphicManager->DrawHammer();
 
-#if 0
         GraphicManager->DrawScore(score);
+
         if (addpunteggiomartello > 0)
         {
           GraphicManager->DrawInstantScore(1, Play->getX() - 9, Play->getY());
@@ -406,7 +406,7 @@ bool Game::runGame(int& lifes, int& level, int& score)
 
         GraphicManager->DrawDelete(segnaCancellazione.first, segnaCancellazione.second);
         GraphicManager->DrawLives(lifes);
-#endif
+
         //al_flip_display();
         GraphicManager->flipDisplay();
         redraw = false;
