@@ -548,7 +548,209 @@ void Graphics::DrawCut(int frame)
   
 }
 
+void Graphics::DrawHammer()
+{
+  /*al_set_target_bitmap(buffer);
+  al_draw_bitmap(staticBitmaps[2], 18 * 20, 21 * 20, 0);
+  al_set_target_backbuffer(display);
+  al_clear_to_color(al_map_rgb(0, 0, 0));
+  al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
 
+  auto drawStaticBitmap = [this](int index, int x, int y) {
+    sf::Sprite sprite(*staticBitmaps[index]);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+    };
+
+  drawStaticBitmap(2, 18 * 20, 21 * 20);
+}
+
+
+void Graphics::DrawPlayerHammer(Player* Play)
+{
+  auto drawBitmap = [this](const std::string& path, int x, int y, bool flippedX) {
+    sf::Texture texture;
+    texture.loadFromFile(path);
+    sf::Sprite sprite(texture);
+    sprite.setScale(flippedX ? -1 : 1, 1);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+    };
+
+  auto drawStaticBitmap = [this](int index, int x, int y) {
+    sf::Sprite sprite(*staticBitmaps[index]);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+};
+
+  //al_set_target_bitmap(buffer);
+  bool decenter = false;
+
+  bool flippedX = false;
+
+  if (!Play->getHammered())
+    flippedX = false;
+  else
+    if (Play->getDirection() == LEFT)
+      flippedX = true;
+    else
+      flippedX = false;
+
+  auto x = Play->getX();
+  auto y = Play->getY();
+
+  if (Play->getFrame() >= 0 && Play->getFrame() <= 15 && Play->getHammered())
+    drawBitmap("assets/img/player/hammer4.png", x, y, flippedX);
+  else if (Play->getFrame() >= 16 && Play->getFrame() <= 33 && Play->getHammered())
+    drawBitmap("assets/img/player/hammer4.png", x, y, flippedX);
+
+  else if (Play->getFrame() >= 0 and Play->getFrame() <= 5)
+    drawBitmap("assets/img/player/hammer1R.png", x, y, flippedX);
+  else if (Play->getFrame() >= 6 and Play->getFrame() <= 10)
+    drawBitmap("assets/img/player/hammer3R.png", x, y, flippedX);
+  else if (Play->getFrame() >= 11 and Play->getFrame() <= 15)
+    drawBitmap("assets/img/player/hammer5R.png", x, y, flippedX);
+  else if (Play->getFrame() >= 16 and Play->getFrame() <= 20)
+    drawBitmap("assets/img/player/hammer1.png", x, y, flippedX);
+  else if (Play->getFrame() >= 21 and Play->getFrame() <= 25)
+    drawBitmap("assets/img/player/hammer3.png", x, y, flippedX);
+  else if (Play->getFrame() >= 26 and Play->getFrame() <= 30)
+    drawBitmap("assets/img/player/hammer5.png", x, y, flippedX);
+
+  //if (!Play->getHammered())
+  //  al_draw_bitmap(bitmap, Play->getY(), Play->getX(), 0);
+  //else
+  //  if (Play->getDirection() == LEFT)
+  //    al_draw_bitmap(bitmap, Play->getY(), Play->getX(), 0);
+  //  else
+  //    al_draw_bitmap(bitmap, Play->getY(), Play->getX(), 1);
+
+  //al_destroy_bitmap(bitmap);
+  //al_set_target_backbuffer(display);
+  //al_clear_to_color(al_map_rgb(0, 0, 0));
+  //al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+}
+
+void Graphics::DrawPlayer(Player* Play)
+{
+  auto drawBitmap = [this](const std::string& path, int x, int y) {
+    sf::Texture texture;
+    texture.loadFromFile(path);
+    sf::Sprite sprite(texture);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+    };
+
+  // TODO: use sprite animation class
+  // TODO: why x and y are swapped?
+  auto x = Play->getY();
+  auto y = Play->getX();
+
+  //x = 100;
+  //y = 100;
+
+  //al_set_target_bitmap(buffer);
+  if (Play->getFrame() >= 0 and Play->getFrame() <= 5)
+    drawBitmap("assets/img/player/right1.png", x, y);
+  else if (Play->getFrame() >= 6 and Play->getFrame() <= 10)
+    drawBitmap("assets/img/player/right2.png", x, y);
+  else if (Play->getFrame() >= 11 and Play->getFrame() <= 15)
+    drawBitmap("assets/img/player/right3.png", x, y);
+  else if (Play->getFrame() >= 16 and Play->getFrame() <= 20)
+    drawBitmap("assets/img/player/left1.png", x, y);
+  else if (Play->getFrame() >= 21 and Play->getFrame() <= 25)
+    drawBitmap("assets/img/player/left2.png", x, y);
+  else if (Play->getFrame() >= 26 and Play->getFrame() <= 30)
+    drawBitmap("assets/img/player/left3.png", x, y);
+  else if (Play->getFrame() >= 31 and Play->getFrame() <= 33)
+    drawBitmap("assets/img/player/climb1.png", x, y);
+  else if (Play->getFrame() >= 34 and Play->getFrame() <= 36)
+    drawBitmap("assets/img/player/climb2.png", x, y);
+  else if (Play->getFrame() == 37)
+    drawBitmap("assets/img/player/jumpr.png", x, y);
+  else if (Play->getFrame() == 38)
+    drawBitmap("assets/img/player/jumpl.png", x, y);
+  else if (Play->getFrame() == 39)
+    drawBitmap("assets/img/player/rightfall.png", x, y);
+  else if (Play->getFrame() == 40)
+    drawBitmap("assets/img/player/leftfall.png", x, y);
+
+  //al_draw_bitmap(bitmap, Play->getY(), Play->getX(), 0);
+  //al_destroy_bitmap(bitmap);
+  //al_set_target_backbuffer(display);
+  //al_clear_to_color(al_map_rgb(0, 0, 0));
+  //al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+}
+
+void Graphics::DrawBarrel(Barrel& Bar)
+{
+  auto drawBitmap = [this](const std::string& path, int x, int y, bool flippedX) {
+    sf::Texture texture;
+    texture.loadFromFile(path);
+    sf::Sprite sprite(texture);
+    sprite.setScale(flippedX ? -1 : 1, 1);
+    sprite.setPosition(x, y);
+    buffer->draw(sprite);
+    };
+
+  auto x = Bar.getX();
+  auto y = Bar.getY();
+  bool flippedX = (Bar.getDirection() == RIGHT) ? false : true; 
+
+  //al_set_target_bitmap(buffer);
+  if (Bar.isFalling())
+  {
+    if (Bar.getFrame() >= 0 and Bar.getFrame() < 5)
+      drawBitmap("assets/img/barrel/barrelfallingN1.png", x, y, flippedX);
+    else if (Bar.getFrame() >= 5 and Bar.getFrame() <= 7)
+      drawBitmap("assets/img/Barrel/barrelfallingN2.png", x, y, flippedX);
+
+    if (Bar.getFrame() >= 7)
+      Bar.setFrame(0);
+    else
+      Bar.nextFrame();
+   /* al_draw_bitmap(bitmap, Bar.getY(), Bar.getX(), 0);
+    al_destroy_bitmap(bitmap);
+    al_set_target_backbuffer(display);
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
+  }
+  else
+  {
+    if (Bar.getFrame() == 0)
+      drawBitmap("assets/img/Barrel/barrel1.png", x, y, flippedX);
+    if (Bar.getFrame() == 1)
+      drawBitmap("assets/img/Barrel/barrel2.png", x, y, flippedX);
+    if (Bar.getFrame() == 2)
+      drawBitmap("assets/img/Barrel/barrel3.png", x, y, flippedX);
+    if (Bar.getFrame() == 3)
+      drawBitmap("assets/img/Barrel/barrel4.png", x, y, flippedX);
+    if (Bar.getFrame() == 4)
+      drawBitmap("assets/img/Barrel/barrel5.png", x, y, flippedX);
+    if (Bar.getFrame() == 5)
+      drawBitmap("assets/img/Barrel/barrel6.png", x, y, flippedX);
+    if (Bar.getFrame() == 6)
+      drawBitmap("assets/img/Barrel/barrel7.png", x, y, flippedX);
+    if (Bar.getFrame() == 7)
+      drawBitmap("assets/img/Barrel/barrel8.png", x, y, flippedX);
+    
+    if (Bar.getFrame() >= 7)
+      Bar.setFrame(0);
+    else
+      Bar.nextFrame();
+
+   /* if (Bar.getDirection() == RIGHT)
+      al_draw_bitmap(bitmap, Bar.getY(), Bar.getX(), 0);
+    else
+      al_draw_bitmap(bitmap, Bar.getY(), Bar.getX(), 1);*/
+
+    /*al_destroy_bitmap(bitmap);
+    al_set_target_backbuffer(display);
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);*/
+  }
+
+}
 
 #if 0
 Graphics(sf::RenderWindow* display,

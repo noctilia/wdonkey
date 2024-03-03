@@ -378,11 +378,11 @@ bool Game::runGame(int& lifes, int& level, int& score)
         GraphicManager->DrawKong(Wukong);
         GraphicManager->DrawExplosive(frameExpl);
 
-#if 0
         if (Play->getMartello() and Play->getFrame() <= 30)
           GraphicManager->DrawPlayerHammer(Play);
         else
           GraphicManager->DrawPlayer(Play);
+
 
         for (auto i = Barili.begin(); i != Barili.end(); i++)
           GraphicManager->DrawBarrel(*i);
@@ -390,6 +390,7 @@ bool Game::runGame(int& lifes, int& level, int& score)
         if (Play->getMartello() == false and hammerTime < 200)
           GraphicManager->DrawHammer();
 
+#if 0
         GraphicManager->DrawScore(score);
         if (addpunteggiomartello > 0)
         {
