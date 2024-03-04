@@ -306,13 +306,13 @@ void Graphics::DrawKong(Kong* Wukong)
 {
   //al_set_target_bitmap(buffer);
   // TODO: use sprite animation class
-  if (Wukong->getFrame() > 0 and Wukong->getFrame() <= Wukong->getDifficolta() * 20)
+  if (Wukong->getFrame() > 0 and Wukong->getFrame() <= Wukong->getDifficulty() * 20)
     bitmap.loadFromFile("assets/img/kong/kong1.png");
-  else if (Wukong->getFrame() > Wukong->getDifficolta() * 20 and Wukong->getFrame() <= Wukong->getDifficolta() * 40)
+  else if (Wukong->getFrame() > Wukong->getDifficulty() * 20 and Wukong->getFrame() <= Wukong->getDifficulty() * 40)
     bitmap.loadFromFile("assets/img/kong/kong2.png");
-  else if (Wukong->getFrame() > Wukong->getDifficolta() * 40 and Wukong->getFrame() <= Wukong->getDifficolta() * 60)
+  else if (Wukong->getFrame() > Wukong->getDifficulty() * 40 and Wukong->getFrame() <= Wukong->getDifficulty() * 60)
     bitmap.loadFromFile("assets/img/kong/kong3.png");
-  else if (Wukong->getFrame() > Wukong->getDifficolta() * 60 and Wukong->getFrame() <= Wukong->getDifficolta() * 80)
+  else if (Wukong->getFrame() > Wukong->getDifficulty() * 60 and Wukong->getFrame() <= Wukong->getDifficulty() * 80)
     bitmap.loadFromFile("assets/img/kong/kong4.png");
   else
     bitmap.loadFromFile("assets/img/kong/kong5.png");
@@ -1017,13 +1017,13 @@ void Graphics::DrawPlayer(Player* Play)
 void Graphics::DrawKong(Kong* Wukong)
 {
   al_set_target_bitmap(buffer);
-  if (Wukong->getFrame() > 0 and Wukong->getFrame() <= Wukong->getDifficolta() * 20)
+  if (Wukong->getFrame() > 0 and Wukong->getFrame() <= Wukong->getDifficulty() * 20)
     bitmap = al_load_bitmap("../Assets/Bitmaps/Kong/kong1.png");
-  else if (Wukong->getFrame() > Wukong->getDifficolta() * 20 and Wukong->getFrame() <= Wukong->getDifficolta() * 40)
+  else if (Wukong->getFrame() > Wukong->getDifficulty() * 20 and Wukong->getFrame() <= Wukong->getDifficulty() * 40)
     bitmap = al_load_bitmap("../Assets/Bitmaps/Kong/kong2.png");
-  else if (Wukong->getFrame() > Wukong->getDifficolta() * 40 and Wukong->getFrame() <= Wukong->getDifficolta() * 60)
+  else if (Wukong->getFrame() > Wukong->getDifficulty() * 40 and Wukong->getFrame() <= Wukong->getDifficulty() * 60)
     bitmap = al_load_bitmap("../Assets/Bitmaps/Kong/kong3.png");
-  else if (Wukong->getFrame() > Wukong->getDifficolta() * 60 and Wukong->getFrame() <= Wukong->getDifficolta() * 80)
+  else if (Wukong->getFrame() > Wukong->getDifficulty() * 60 and Wukong->getFrame() <= Wukong->getDifficulty() * 80)
     bitmap = al_load_bitmap("../Assets/Bitmaps/Kong/kong4.png");
   else
     bitmap = al_load_bitmap("../Assets/Bitmaps/Kong/kong5.png");

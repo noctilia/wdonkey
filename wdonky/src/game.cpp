@@ -168,6 +168,11 @@ bool Game::runGame(int& lifes, int& level, int& score)
 
       while (GraphicManager->getEvent(event))
       {
+        if (sf::Event::Closed == event.type) {
+          done = true;
+          lifes = 1;
+        }
+
         if (event.type == sf::Event::KeyPressed) {
           if (event.key.code == sf::Keyboard::Up)
           {
@@ -202,32 +207,20 @@ bool Game::runGame(int& lifes, int& level, int& score)
             done = true;
             lifes = 1;
           }
-
-          if (sf::Event::Closed == event.type) {
-            done = true;
-            lifes = 1;
-          }
-
+          
           if (event.key.code == sf::Keyboard::Tab)
           {
             complete = true;          //LEVEL SKIPPER CHEAT
             done = true;
           }
 
-          if (event.key.code == sf::Keyboard::LShift and Play->getMartello())
+          if (event.key.code == sf::Keyboard::LShift and Play->getHammer())
           {
             Play->setHammered(true);
             hTime++;
             if (!muted)
               SoundManager->playHammer();
           }
-
-
-          //for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
-          //  key[i] &= KEY_SEEN;
-
-
-
         }
       }
 #if 0
@@ -270,7 +263,7 @@ bool Game::runGame(int& lifes, int& level, int& score)
           complete = true;          //LEVEL SKIPPER CHEAT
           done = true;
         }
-        if (key[ALLEGRO_KEY_LSHIFT] and Play->getMartello())
+        if (key[ALLEGRO_KEY_LSHIFT] and Play->getHammer())
         {
           Play->setHammered(true);
           hTime++;
@@ -282,8 +275,8 @@ bool Game::runGame(int& lifes, int& level, int& score)
 
 
         Play->HandleGravity();
-        if (Play->getX() / 20 == 21 and Play->getY() / 20 == 17 and Play->getMartello() == false and hammerTime == 0)//prende il martello.
-          Play->setMartello(true);
+        if (Play->getX() / 20 == 21 and Play->getY() / 20 == 17 and Play->getHammer() == false and hammerTime == 0)//prende il martello.
+          Play->setHammer(true);
         if (hTime < 30)
           hTime++;
         else
@@ -292,10 +285,10 @@ bool Game::runGame(int& lifes, int& level, int& score)
           Play->setHammered(false);
         }
 
-        if (Play->getMartello())
+        if (Play->getHammer())
           hammerTime++;
-        if (hammerTime > 325 and Play->getMartello())
-          Play->setMartello(false);
+        if (hammerTime > 325 and Play->getHammer())
+          Play->setHammer(false);
         if (Wukong->getLancia() == Wukong->getFrame())
         {
           Barili.push_back(Bar);
@@ -382,9 +375,9 @@ bool Game::runGame(int& lifes, int& level, int& score)
 
       // this needs timer events... oder move to logic loop
       Play->HandleGravity();
-      Play->HandleGravity();
-      if (Play->getX() / 20 == 21 and Play->getY() / 20 == 17 and Play->getMartello() == false and hammerTime == 0)//prende il martello.
-        Play->setMartello(true);
+      //takes the hammer
+      if (Play->getX() / 20 == 21 and Play->getY() / 20 == 17 and Play->getHammer() == false and hammerTime == 0)
+        Play->setHammer(true);
       if (hTime < 30)
         hTime++;
       else
@@ -393,13 +386,13 @@ bool Game::runGame(int& lifes, int& level, int& score)
         Play->setHammered(false);
       }
 
-      if (Play->getMartello())
+      if (Play->getHammer())
         hammerTime++;
 
-      if (hammerTime > 325 and Play->getMartello())
-        Play->setMartello(false);
+      if (hammerTime > 325 and Play->getHammer())
+        Play->setHammer(false);
 
-      if (Wukong->getLancia() == Wukong->getFrame())
+      if (Wukong->getThrowBarrel() == Wukong->getFrame())
       {
         Barili.push_back(Bar);
         Wukong->nextFrame();
@@ -415,7 +408,7 @@ bool Game::runGame(int& lifes, int& level, int& score)
           SoundManager->stopSamples();
           if (!muted)
             SoundManager->playDeath();
-          Play->setMorto(true);
+          Play->setDead(true);
           
           //al_rest(4);
           done = true;
@@ -472,16 +465,15 @@ bool Game::runGame(int& lifes, int& level, int& score)
         GraphicManager->DrawKong(Wukong);
         GraphicManager->DrawExplosive(frameExpl);
 
-        if (Play->getMartello() and Play->getFrame() <= 30)
+        if (Play->getHammer() and Play->getFrame() <= 30)
           GraphicManager->DrawPlayerHammer(Play);
         else
           GraphicManager->DrawPlayer(Play);
 
-
         for (auto i = Barili.begin(); i != Barili.end(); i++)
           GraphicManager->DrawBarrel(*i);
 
-        if (Play->getMartello() == false and hammerTime < 200)
+        if (Play->getHammer() == false and hammerTime < 200)
           GraphicManager->DrawHammer();
 
         GraphicManager->DrawScore(score);
@@ -501,7 +493,6 @@ bool Game::runGame(int& lifes, int& level, int& score)
         GraphicManager->DrawDelete(segnaCancellazione.first, segnaCancellazione.second);
         GraphicManager->DrawLives(lifes);
 
-        //al_flip_display();
         GraphicManager->flipDisplay();
         redraw = false;
       }
@@ -820,7 +811,7 @@ bool Game::runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue, int& lifes,
           complete = true;          //LEVEL SKIPPER CHEAT
           done = true;
         }
-        if (key[ALLEGRO_KEY_LSHIFT] and Play->getMartello())
+        if (key[ALLEGRO_KEY_LSHIFT] and Play->getHammer())
         {
           Play->setHammered(true);
           hTime++;
@@ -832,8 +823,8 @@ bool Game::runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue, int& lifes,
 
 
         Play->HandleGravity();
-        if (Play->getX() / 20 == 21 and Play->getY() / 20 == 17 and Play->getMartello() == false and hammerTime == 0)//prende il martello.
-          Play->setMartello(true);
+        if (Play->getX() / 20 == 21 and Play->getY() / 20 == 17 and Play->getHammer() == false and hammerTime == 0)//prende il martello.
+          Play->setHammer(true);
         if (hTime < 30)
           hTime++;
         else
@@ -842,10 +833,10 @@ bool Game::runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue, int& lifes,
           Play->setHammered(false);
         }
 
-        if (Play->getMartello())
+        if (Play->getHammer())
           hammerTime++;
-        if (hammerTime > 325 and Play->getMartello())
-          Play->setMartello(false);
+        if (hammerTime > 325 and Play->getHammer())
+          Play->setHammer(false);
         if (Wukong->getLancia() == Wukong->getFrame())
         {
           Barili.push_back(Bar);
@@ -933,14 +924,14 @@ bool Game::runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue, int& lifes,
         GraphicManager->DrawStaticBarrels();
         GraphicManager->DrawKong(Wukong);
         GraphicManager->DrawExplosive(frameExpl);
-        if (Play->getMartello() and Play->getFrame() <= 30)
+        if (Play->getHammer() and Play->getFrame() <= 30)
           GraphicManager->DrawPlayerHammer(Play);
         else
           GraphicManager->DrawPlayer(Play);
 
         for (auto i = Barili.begin(); i != Barili.end(); i++)
           GraphicManager->DrawBarrel(*i);
-        if (Play->getMartello() == false and hammerTime < 200)
+        if (Play->getHammer() == false and hammerTime < 200)
           GraphicManager->DrawHammer();
         GraphicManager->DrawScore(score);
         if (addpunteggiomartello > 0)

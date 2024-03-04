@@ -15,7 +15,7 @@ class Entity
 protected:
   int x;
   int y;
-  int** griglia = NULL;
+  int** grid = nullptr;
   int frame;
   bool falling;
   bool ladderstate;
@@ -39,8 +39,9 @@ class Player
 {
 private:
   int jumpstate;
-  bool morto;
-  bool martello, hammered;
+  bool dead;
+  bool hammer;
+  bool hammered;
 
 public:
   Player(int** c);
@@ -50,10 +51,10 @@ public:
   void MoveRight();
   void Jump();
   void HandleGravity();
-  void setMorto(bool m);
-  bool getMorto();
-  void setMartello(bool c);
-  bool getMartello();
+  void setDead(bool m);
+  bool getDead();
+  void setHammer(bool c);
+  bool getHammer();
   void setHammered(bool h);
   bool getHammered();
   bool getJump();
@@ -80,13 +81,13 @@ public:
 class Kong 
   : public Entity
 {
-  float difficolta;
-  int lancia;
+  float difficulty;
+  int throwBarrel;
 public:
   Kong(int** c, float d);
   void resetFrame();
   void nextFrame();
-  int getLancia();
-  float getDifficolta();
+  int getThrowBarrel() const ;
+  float getDifficulty() const;
 };
 
